@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  nginx:
+    image: nginx:latest
+    restart: always
+#    container_name: nginx
+    ports:
+      - 90:80
+    volumes:
+      - ./nginx/etc:/etc/nginx/conf.d
+      - ./nginx/www:/var/www/
+
+  php:
+    # Билдим с помощью dockerfile указав директорию где он лежит
+    build: ./php
+    restart: always
+#    container_name: php-fpm
+    volumes:
+      - ./nginx/www:/var/www
